@@ -89,21 +89,11 @@ namespace Shaders {
 			//todo: Task5 begin
 			vec4 stretchedPos = pos;
 
-			// Compute the range of the y-coordinates
 			float yRange = max.y - min.y;
+			float yCenter = (min.y + max.y) / 2.0;
 
-			// Compute the normalized position of the current vertex along the y-axis
-			if (pos.y < 0) 
-			{
-				float normalizedY = (max.y - pos.y) / yRange;
-				stretchedPos.y = mix(pos.y, max.y - normalizedY * yRange * (1.0 + k), k);
-			}
-			else
-			{
-				float normalizedY = (pos.y - min.y) / yRange;
-				stretchedPos.y = mix(pos.y, min.y + normalizedY * yRange * (1.0 + k), k);
-			}
-
+			float normalizedY = (pos.y - yCenter) / yRange;
+			stretchedPos.y = mix(pos.y, yCenter + normalizedY * yRange * (1.0 + k), k);
 
 			return stretchedPos;
 			//Task 5 end

@@ -64,6 +64,31 @@ namespace Shaders {
 			vec4 bentPos = pos;
 			//todo: Task3 begin
 
+			float theta = pos.y - ymin;
+			if (pos.y < ymin) 
+			{
+				theta = 0;
+			}
+			else if (pos.y > ymax)
+			{
+				theta = ymax - ymin;
+			}
+
+			float Ctheta = cos(theta);
+			float Stheta = sin(theta);
+			float R = z0 - pos.z;
+
+			if (pos.y >= ymin && pos.y <= ymax) 
+			{
+				bentPos.y = ymin - (R * Stheta);
+				bentPos.z = z0 - (R * Ctheta);
+			}
+			else if (pos.y > ymax)
+			{
+				bentPos.y = ymin - (R * Stheta) + ((pos.y - ymax) * Ctheta);
+				bentPos.z = z0 - (R * Ctheta) + ((pos.y - ymax) * Stheta);
+			}
+
 			return bentPos;
 			//Task 3 end
 		}
@@ -127,8 +152,21 @@ namespace Shaders {
 			//todo: Task4
 			//Assume that the Source cube always is -1..1 on each axis
 			//Have a look at controlPointsOrig and controlPoints
-			float dep[8];
-			vec3 transformedPos = p;
+			vec3 transformedPos = vec3(0.0);
+
+			for (int i = 0; i < 8; i++) {
+				vec3 cpOrig = controlPointsOrig[i];
+				vec3 cp = controlPoints[i];
+
+				float depX = (cpOrig.x == 1.0) ? (1.0 + p.x) / 2.0 : (1.0 - p.x) / 2.0;
+				float depY = (cpOrig.y == 1.0) ? (1.0 + p.y) / 2.0 : (1.0 - p.y) / 2.0;
+				float depZ = (cpOrig.z == 1.0) ? (1.0 + p.z) / 2.0 : (1.0 - p.z) / 2.0;
+
+				float dep = depX * depY * depZ;
+
+				transformedPos += dep * cp;
+			}
+
 			return transformedPos;
 			//Task4 end
 		}

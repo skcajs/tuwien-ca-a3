@@ -29,7 +29,7 @@ class KeypointAnimApp : public App {
 	Volume* volume = nullptr;
 	Animation animation;
 
-	std::vector<string> modeStrings = { "taper", "twist", "bend" };
+	std::vector<string> modeStrings = { "taper", "twist", "bend", "stretch"};
 	std::vector<string> geomStrings = { "cylinder", "cube", "teapot" };
 	int mode = 0;
 	int geomSelected = 0;

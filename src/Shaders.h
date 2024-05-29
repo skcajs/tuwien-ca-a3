@@ -64,15 +64,7 @@ namespace Shaders {
 			vec4 bentPos = pos;
 			//todo: Task3 begin
 
-			float theta = pos.y - ymin;
-			if (pos.y < ymin) 
-			{
-				theta = 0;
-			}
-			else if (pos.y > ymax)
-			{
-				theta = ymax - ymin;
-			}
+			float theta = calcTheta(pos.y, ymin, ymax);
 
 			float Ctheta = cos(theta);
 			float Stheta = sin(theta);
@@ -93,6 +85,30 @@ namespace Shaders {
 			//Task 3 end
 		}
 
+		vec4 stretch(vec4 pos, float k) {
+			//todo: Task5 begin
+			vec4 stretchedPos = pos;
+
+			// Compute the range of the y-coordinates
+			float yRange = max.y - min.y;
+
+			// Compute the normalized position of the current vertex along the y-axis
+			if (pos.y < 0) 
+			{
+				float normalizedY = (max.y - pos.y) / yRange;
+				stretchedPos.y = mix(pos.y, max.y - normalizedY * yRange * (1.0 + k), k);
+			}
+			else
+			{
+				float normalizedY = (pos.y - min.y) / yRange;
+				stretchedPos.y = mix(pos.y, min.y + normalizedY * yRange * (1.0 + k), k);
+			}
+
+
+			return stretchedPos;
+			//Task 5 end
+		}
+
 		void main(void) {
 			
 			if (deformMode == 0)
@@ -100,7 +116,9 @@ namespace Shaders {
 			else if (deformMode == 1)
 				worldPosition = twist(vec4(ciPosition, 1), t);
 			else if (deformMode == 2)
-				worldPosition = bend(vec4(ciPosition,1),t);
+				worldPosition = bend(vec4(ciPosition, 1), t);
+			else if (deformMode == 3)
+				worldPosition = stretch(vec4(ciPosition, 1), t);
 			gl_Position = ciModelViewProjection * worldPosition;
 		}
 		))

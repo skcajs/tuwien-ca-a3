@@ -26,6 +26,11 @@ namespace Shaders {
 
 			//todo: Task1 begin
 			vec4 taperedPos = pos;
+			float s = ((max.y - pos.y) / (max.y - min.y));
+			float sk = mix(1.0, s, k);
+
+			taperedPos.x = sk * pos.x;
+			taperedPos.z = sk * pos.z;
 			
 			return taperedPos;
 			//Task1 end
@@ -36,6 +41,9 @@ namespace Shaders {
 			//todo: Task2 begin
 			vec4 twistedPos = pos;
 			
+			twistedPos.x = pos.x * cos(k * pos.y) - pos.z * sin(k * pos.y);
+			twistedPos.z = pos.x * sin(k * pos.y) + pos.z * cos(k * pos.y);
+
 			return twistedPos;
 			//Task 2 end
 		}

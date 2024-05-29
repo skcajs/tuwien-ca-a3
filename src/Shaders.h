@@ -163,16 +163,11 @@ namespace Shaders {
 			vec3 transformedPos = vec3(0.0);
 
 			for (int i = 0; i < 8; i++) {
-				vec3 cpOrig = controlPointsOrig[i];
-				vec3 cp = controlPoints[i];
-
-				float depX = (cpOrig.x == 1.0) ? (1.0 + p.x) / 2.0 : (1.0 - p.x) / 2.0;
-				float depY = (cpOrig.y == 1.0) ? (1.0 + p.y) / 2.0 : (1.0 - p.y) / 2.0;
-				float depZ = (cpOrig.z == 1.0) ? (1.0 + p.z) / 2.0 : (1.0 - p.z) / 2.0;
-
-				float dep = depX * depY * depZ;
-
-				transformedPos += dep * cp;
+				transformedPos += // Calculations dependencies for x,y,z and multiply with control point to reconstruct vector.
+					((controlPointsOrig[i].x == 1.0) ? (1.0 + p.x) / 2.0 : (1.0 - p.x) / 2.0) *
+					((controlPointsOrig[i].y == 1.0) ? (1.0 + p.y) / 2.0 : (1.0 - p.y) / 2.0) *
+					((controlPointsOrig[i].z == 1.0) ? (1.0 + p.z) / 2.0 : (1.0 - p.z) / 2.0) * 
+					controlPoints[i];
 			}
 
 			return transformedPos;
